@@ -1,0 +1,70 @@
+<div class="bg" style="background-color: #F8F8F8;">
+    <nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" nzTip="Working...">
+        <div class="parent">
+            <div class="child">
+                <div nz-col nzSpan="imgDiv">
+                    
+                    <div nz-col nzSpan="24">
+                        <h1 style="margin-left: 25%;">Регистрация</h1>
+                    </div>
+                </div>
+
+
+                <form nz-form [formGroup]="signupForm">
+                    <nz-form-item>
+                        <nz-form-control nzHasFeedback nzErrorTip="Введен не действительный адрес электронной почты">
+                            <input nz-input placeholder="Email" id="email" formControlName="email" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="errorPass">
+                            <input nz-input placeholder="Пароль" type="password" id="password"
+                                formControlName="password" />
+                            <ng-template #errorPass let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Необходим пароль
+                                </ng-container>
+                                <ng-container *ngIf="control.hasError('pattern')">
+                                    Пароль должен содежать 8 символов, 1 в нижнем регистре, 1 в верхнем регистре, 1
+                                    число и
+                                    1 специальный символ
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="errorTpl">
+                            <input nz-input placeholder="Подтвердите пароль" type="password" id="checkPassword"
+                                formControlName="checkPassword" />
+                            <ng-template #errorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Подтвердите пароль
+                                </ng-container>
+                                <ng-container *ngIf="control.hasError('confirm')">
+                                    Пароли не соответствуют
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="userErrorTpl">
+                            <input nz-input placeholder="Имя" id="username" formControlName="name" />
+                            <ng-template #userErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Введите имя
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'"
+                        (click)="register()" [disabled]="signupForm.invalid">Регистрация</button>
+                    Или <a routerLink="/login"> Войти </a>
+                </form>
+            </div>
+        </div>
+    </nz-spin>
+</div>
