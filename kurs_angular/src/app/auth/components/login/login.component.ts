@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
+import { StorageService } from '../../services/storage/storage.service';
+import { Router } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-login',
@@ -11,8 +14,11 @@ export class LoginComponent {
   isSpinning: boolean = false;
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
-    
+  constructor(private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private message: NzMessageService) {
+
   }
 
   ngOnInit() {
@@ -26,6 +32,23 @@ export class LoginComponent {
     console.log(this.loginForm.value)
     this.authService.login(this.loginForm.value).subscribe((res) => {
       console.log(res);
+      if (res.userId! + null) {
+        const user = {
+          id: res.userId,
+          role: res.userRole
+        }
+        StorageService.saveUser(user);
+        StorageService.saveToken(res.jwt);
+        if (StorageService.isAdmin()) {
+          this.router.navigateByUrl("/admin/dashboard");
+        }
+        else if (StorageService.isUser()) {
+          this.router.navigateByUrl("/user/dashboard");
+        }
+        else {
+          this.message.error("Неверные учетные данные", {nzDuration: 50000})
+        }
+      }
     })
   }
 }

@@ -5,7 +5,7 @@ import com.kursovik.kurs.dto.UserDTO;
 
 public interface AuthService {
 
-    UserDTO createCustomer(SignupRequest signupRequest);
+    UserDTO createUser(SignupRequest signupRequest);
 
-    boolean hasCustomerWithEmail(String email);
+    boolean hasUserWithEmail(String email);
 }

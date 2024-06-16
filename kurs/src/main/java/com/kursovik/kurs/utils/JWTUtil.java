@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,11 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JWTUtil {
 
+    @Value("${application.security.jwt.expiration}")
+	private long jwtExpiration;
+	@Value("${application.security.jwt.secret-key}")
+	private String secretKey;
+    
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -42,7 +48,7 @@ public class JWTUtil {
             .setClaims(extraClaims)
             .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1440000))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigninKey(), SignatureAlgorithm.HS256).compact();
     }
 
@@ -59,7 +65,7 @@ public class JWTUtil {
     }
 
     private Key getSigninKey() {
-        byte[] keyBytes = Decoders.BASE64.decode("6ecd32dbd36343e456b133c4a3d3bfb8345bb9430f0ebe041589ec746225477c");
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

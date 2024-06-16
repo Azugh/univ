@@ -39,17 +39,17 @@ public class AuthController {
     private final UserRepository userRepository;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signupCustomer(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest) {
 
-        if (authService.hasCustomerWithEmail(signupRequest.getEmail())) {
+        if (authService.hasUserWithEmail(signupRequest.getEmail())) {
             return new ResponseEntity<>("Пользователь с таким email уже существует", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserDTO createdCustomererDTO = authService.createCustomer(signupRequest);
-        if (createdCustomererDTO == null)
+        UserDTO createdUserDTO = authService.createUser(signupRequest);
+        if (createdUserDTO == null)
             return new ResponseEntity<>(
                     "Пользователь не был создан. Повторите попытку", HttpStatus.BAD_REQUEST);
-        return new ResponseEntity<>(createdCustomererDTO, HttpStatus.CREATED);
+        return new ResponseEntity<>(createdUserDTO, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
@@ -64,7 +64,8 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Не правильный пароль или email");
         }
-        final UserDetails userDetails = userService.userDetailsService().loadUserByUsername(authenticationRequest.getEmail());
+        final UserDetails userDetails = userService.userDetailsService()
+                .loadUserByUsername(authenticationRequest.getEmail());
         Optional<User> optionalUser = userRepository.findFirstByEmail(userDetails.getUsername());
         final String jwt = JWTUtil.generateToken(userDetails);
         AuthenticationResponse authenticationResponse = new AuthenticationResponse();

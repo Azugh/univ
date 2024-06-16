@@ -1,18 +1,14 @@
 {
     "sqltools.connections": [
         {
-            "mysqlOptions": {
-                "authProtocol": "default",
-                "enableSsl": "Disabled"
-            },
             "previewLimit": 50,
             "server": "localhost",
-            "port": 3306,
-            "driver": "MySQL",
-            "name": "kursovik",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "kurs",
             "database": "kursovik",
-            "username": "root",
-            "password": "root"
+            "username": "username",
+            "password": "password"
         }
     ]
 }

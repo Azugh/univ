@@ -1,0 +1,20 @@
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5432/kursovik
+        username: username
+        password: password
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        database: postgresql    
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                format_sql: true
+application:
+    security:
+        jwt:
+            secret-key: 6ecd32dbd36343e456b133c4a3d3bfb8345bb9430f0ebe041589ec746225477c
+            expiration: 8640000
+server:
+    port: 8080
